@@ -4,11 +4,15 @@ import pandas as pd
 
 app = Flask(__name__)  # Instantiate the Flask application to the variable app
 
+# Read the stations data into a DataFrame
+stations = pd.read_csv("data_small/stations.txt", skiprows=17)
+stations = stations[["STAID", "STANAME                                 "]]
+
 
 @app.route("/")  # Define the route for the home URL
 def home():  # Define the home function
     # Use render_template to render the HTML file
-    return render_template("home.html")
+    return render_template("home.html", data=stations.to_html())
 
 
 # Define the route for the API with dynamic parameters station and date
