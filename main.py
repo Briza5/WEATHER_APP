@@ -1,5 +1,6 @@
 # Import Flask class and render_template function from flask import Flask, render_template
 from flask import Flask, render_template
+import pandas as pd
 
 app = Flask(__name__)  # Instantiate the Flask application to the variable app
 
