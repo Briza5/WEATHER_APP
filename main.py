@@ -14,7 +14,16 @@ def home():  # Define the home function
 # Define the route for the API with dynamic parameters station and date
 @app.route("/api/v1/<station>/<date>")
 def about(station, date):  # define the about function with parameters station and date
-    temperature = 23    # Example temperature value
+    # Construct the filename based on station parameter
+    filename = "data_small\TG_STAID" + str(station).zfill(6) + ".txt"
+    # Read the CSV file into a DataFrame
+    df = pd.read_csv(filename, skiprows=20, parse_dates=["    DATE"])
+    # Extract temperature for the given date
+    temperature_extract = df.loc[df['    DATE'] == date]['   TG'].squeeze()/10
+    if not temperature_extract.empty:
+        temperature = float(temperature_extract)
+    else:
+        temperature = None
     return {"station": station,
             "date": date,
             # return a JSON response with station, date, and temperature
