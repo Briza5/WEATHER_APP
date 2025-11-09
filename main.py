@@ -34,5 +34,26 @@ def about(station, date):  # define the about function with parameters station a
             "temperature": temperature}
 
 
+@app.route("/api/v1/<station>")
+def all_data(station):
+    filename = "data_small\TG_STAID" + str(station).zfill(6) + ".txt"
+    df = pd.read_csv(filename, skiprows=20, parse_dates=["    DATE"])
+    result = df.to_dict(orient="records")
+    return result
+
+
+@app.route("/api/v1/yearly/<station>/<year>")
+def yearly(station, year):
+    filename = "data_small\TG_STAID" + str(station).zfill(6) + ".txt"
+    df = pd.read_csv(filename, skiprows=20)
+    df['    DATE'] = df['    DATE'].astype(
+        str)  # Convert DATE column to string
+    result = df[df['    DATE'].str.startswith(
+        # Filter rows where DATE starts with the specified year
+        str(year))].to_dict(orient="records")
+    print(result)
+    return result
+
+
 if __name__ == "__main__":  # Check if the script is run directly and not imported as a module
     app.run(debug=True)  # Run the Flask application in debug mode
